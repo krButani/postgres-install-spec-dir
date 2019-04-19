@@ -15,8 +15,10 @@ passwd -d postgres
 
 chown postgres:postgres /home/Postgres/ -R
 
-Untar postgresql-9.1.0
-cd postgresql-9.1.0
+
+# Untar postgresql-9.1.0
+tar xjf postgresql-9.2.24.tar.bz2 
+cd postgresql-9.2.24
 
 # old os 
 ./configure --prefix=/pgsql --with-CXX 

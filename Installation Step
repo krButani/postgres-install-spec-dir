@@ -1,0 +1,163 @@
+# must required to root login
+
+# Search Google "bz2 postgers 'version'" and download postgres
+
+# install 2 lib is readline, zlib find on inernet command
+
+#centos/fedora
+yum install readline-devel
+yum install zlib-devel
+
+
+# remove all previous installed progresql 
+
+# Got My Installtion Dir
+
+
+/*
+--------------------------------------------------------------
+		CREATE USER AND GIVE THAT FOLDER PERMISSION
+--------------------------------------------------------------
+*/
+
+cp bash_profile /etc/skel/.bash_profile 
+
+# delete postgres user if avaliable
+userdel postgres 
+
+// add user 
+
+#fedora/centos
+adduser postgres -d /home/Postgres
+
+#ubuntu
+adduser postgres --home /home/Postgres
+
+passwd -d postgres
+
+Give Permission
+chown postgres:postgres /home/Postgres/ -R
+
+
+/*
+--------------------------------------------------------------
+		INSTALL PROGRESQL
+--------------------------------------------------------------
+*/
+
+# Untar postgresql
+tar xjf postgresql-9.2.24.tar.bz2 
+cd postgresql-9.2.24
+
+# if you have not pgsql dir then create is I have create that dir when installted in OS
+mkdir /pgsql 
+chomd 777 /pgsql -R 
+
+# old os 
+./configure --prefix=/pgsql --with-CXX 
+# new os
+./configure --prefix=/pgsql
+
+
+# fedora/centos
+gmake
+gmake install
+
+# debain
+make
+make install
+
+/*
+--------------------------------------------------------------
+		CONFIGURE PROGRESQL
+--------------------------------------------------------------
+*/
+
+# fedora/centos
+cp /pgsql/bin/postgres /etc/rc.d/init.d/ 
+
+# debain system
+cp /pgsql/bin/postgres /etc/init.d/ 
+
+# fedora/centos
+cp /pgsql/bin/postgres /etc/rc.d/init.d/postgresql 
+
+# debain system
+cp /pgsql/bin/postgres /etc/init.d/postgresql
+
+# Add line to file   
+open file /etc/ld.so.conf and add line in last of file (without quot) "/pgsql/lib"
+
+# Fire command
+ldconfig
+
+# Give Permission
+chown postgres:postgres /pgsql/ -R
+
+# Fedora/centos
+sh postgres.init.sh install
+
+# Debain
+sh ubuntu.postgres.init.sh install
+
+# Create Data Dir
+su - postgres -c "initdb -D /pgsql/data"
+
+# Start Service
+service postgresql start
+
+# may be it show error Don't worry about it. Follow the step
+
+
+#if necessary do following commands
+su - postgres -c "createlang plpgsql template1" # only need fedora/centos
+su - postgres -c "createdb postgres" # only need fedora/centos
+
+
+# fedora/centos
+cd /etc/rc.d/rc0.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc.d/rc1.d
+ ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc.d/rc3.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc.d/rc4.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc.d/rc5.d
+ln -sf ../init.d/postgresql S85postgresql
+
+cd /etc/rc.d/rc6.d
+ln -sf ../init.d/postgresql K15postgresql
+
+
+# debain
+
+cd /etc/rc0.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc1.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc3.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc4.d
+ln -sf ../init.d/postgresql K15postgresql
+
+cd /etc/rc5.d
+ln -sf ../init.d/postgresql S85postgresql
+
+cd /etc/rc6.d
+ln -sf ../init.d/postgresql K15postgresql
+
+
+# for new system Globle access
+# debain
+cp -rf /pgsql/bin/* /bin/
+
+#fedora/centos
+cp -rf /pgsql/bin/*  /usr/bin 
