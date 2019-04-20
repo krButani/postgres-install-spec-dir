@@ -93,7 +93,7 @@ PGOPTS="-i -B 1024"
 #. /etc/init.d/functions
 
 # Get config.
-#. /etc/sysconfig/network
+. /etc/systemd
 
 #
 # Check that networking is up.
@@ -146,12 +146,13 @@ case "$1" in
   install)
     echo "Adding postgres to runlevel system."
     cp $0 /etc/init.d/postgresql
-    /sbin/chkconfig --add postgresql
+    update-rc.d postgresql defaults
+    update-rc.d postgresql start 20 3 4 5
     echo
     ;;
   uninstall)
     echo "Deleting postgres from runlevel system."
-    /sbin/chkconfig --del postgresql
+    update-rc.d -f postgresql remove
     rm /etc/init.d/postgresql
     echo
     ;;

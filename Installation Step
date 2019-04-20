@@ -103,6 +103,20 @@ sh ubuntu.postgres.init.sh install
 # Create Data Dir
 su - postgres -c "initdb -D /pgsql/data"
 
+# if you find following error
+initdb: file "/usr/share/postgres.bki" does not exit
+
+# then fire following command
+su - postgres
+cd /pgsql/bin
+./inidb /pgsql/bin
+
+# or login
+su - postgres
+./postmaster -D /pgsql/data
+
+
+
 # Start Service
 service postgresql start
 
